@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Provision WordPress Stable
 
-echo " * Custom site template provisioner - downloads and installs a copy of WP stable for testing, building client sites, etc"
+echo " * Roots / Bedrock site template provisioner - downloads and installs a copy of Bedrock instance"
 
 # fetch the first host as the primary domain. If none is available, generate a default using the site name
 DOMAIN=`get_primary_host "${VVV_SITE_NAME}".test`
@@ -28,17 +28,11 @@ noroot touch ${VVV_PATH_TO_SITE}/log/nginx-access.log
 if [ "${WP_TYPE}" != "none" ]; then
 
   # Install and configure the latest stable version of WordPress
-  if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/wp-load.php" ]]; then
-    echo "Downloading WordPress..." 
-    noroot wp core download --locale="${WP_LOCALE}" --version="${WP_VERSION}"
-  fi
-
-  if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/wp-config.php" ]]; then
+  if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/web/wp/wp-load.php" ]]; then
+    echo "Installing Bedrock WordPress..." 
+    composer create-project roots/bedrock public_html 
     echo "Configuring WordPress Stable..."
-    noroot wp core config --dbname="${DB_NAME}" --dbuser=wp --dbpass=wp --quiet --extra-php <<PHP
-define( 'WP_DEBUG', true );
-define( 'SCRIPT_DEBUG', true );
-PHP
+    printf "DB_NAME=$db_name\nDB_USER=wp\nDB_PASSWORD=wp\nDB_HOST=localhost\n\nWP_ENV=development\nWP_HOME=http://$domain\nWP_SITEURL=http://$domain/wp" >> public_html/.env
   fi
 
   if ! $(noroot wp core is-installed); then
