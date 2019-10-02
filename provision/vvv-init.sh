@@ -34,7 +34,8 @@ if [ "${WP_TYPE}" != "none" ]; then
     echo "Configuring WordPress Stable..."
     printf "DB_NAME=${DB_NAME}\nDB_USER=wp\nDB_PASSWORD=wp\nDB_HOST=localhost\n\nWP_ENV=development\nWP_HOME=http://${DOMAIN}\nWP_SITEURL=http://${DOMAIN}/wp" > ${VVV_PATH_TO_SITE}/public_html/.env
   fi
-
+  echo "Pass to root folder..."  
+  cd ${VVV_PATH_TO_SITE}/public_html 
   if ! $(noroot wp core is-installed); then
     echo "Installing WordPress Stable..."
 
