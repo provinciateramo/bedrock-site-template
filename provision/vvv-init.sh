@@ -32,7 +32,7 @@ if [ "${WP_TYPE}" != "none" ]; then
     echo "Installing Bedrock WordPress..." 
     noroot composer create-project roots/bedrock ${VVV_PATH_TO_SITE}/public_html 
     echo "Configuring WordPress Stable..."
-    printf "DB_NAME=$db_name\nDB_USER=wp\nDB_PASSWORD=wp\nDB_HOST=localhost\n\nWP_ENV=development\nWP_HOME=http://$domain\nWP_SITEURL=http://$domain/wp" >> ${VVV_PATH_TO_SITE}/public_html/.env
+    printf "DB_NAME=${DB_NAME}\nDB_USER=wp\nDB_PASSWORD=wp\nDB_HOST=localhost\n\nWP_ENV=development\nWP_HOME=http://${DOMAIN}\nWP_SITEURL=http://${DOMAIN}/wp" >> ${VVV_PATH_TO_SITE}/public_html/.env
   fi
 
   if ! $(noroot wp core is-installed); then
