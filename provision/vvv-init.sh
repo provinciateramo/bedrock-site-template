@@ -30,9 +30,9 @@ if [ "${WP_TYPE}" != "none" ]; then
   # Install and configure the latest stable version of WordPress
   if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/web/wp/wp-load.php" ]]; then
     echo "Installing Bedrock WordPress..." 
-    composer create-project roots/bedrock public_html 
+    noroot composer create-project roots/bedrock ${VVV_PATH_TO_SITE}/public_html 
     echo "Configuring WordPress Stable..."
-    printf "DB_NAME=$db_name\nDB_USER=wp\nDB_PASSWORD=wp\nDB_HOST=localhost\n\nWP_ENV=development\nWP_HOME=http://$domain\nWP_SITEURL=http://$domain/wp" >> public_html/.env
+    printf "DB_NAME=$db_name\nDB_USER=wp\nDB_PASSWORD=wp\nDB_HOST=localhost\n\nWP_ENV=development\nWP_HOME=http://$domain\nWP_SITEURL=http://$domain/wp" >> ${VVV_PATH_TO_SITE}/public_html/.env
   fi
 
   if ! $(noroot wp core is-installed); then
