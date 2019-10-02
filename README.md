@@ -1,4 +1,4 @@
-# VVV Custom site template
+# VVV Custom site template for Roots/Bedrock
 For when you just need a simple dev site
 
 ## Overview
