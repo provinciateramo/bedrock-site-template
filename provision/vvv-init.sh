@@ -106,10 +106,10 @@ get_config_value 'wpconfig_constants' |
       noroot wp config set "${key}" "${value}" --raw
   done
   
-WP_PLUGINS=`get_config_value 'install_plugins' ''`
+WP_PLUGINS=`get_config_value 'composer_install_plugins' ''`
 if [ ! -z "${WP_PLUGINS}" ]; then
     for plugin in ${WP_PLUGINS//- /$'\n'}; do 
-        noroot wp plugin install "${plugin}" --activate
+        noroot composer require "${plugin}"
     done
 fi
 
