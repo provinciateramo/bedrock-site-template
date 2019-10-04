@@ -109,8 +109,8 @@ if [ ! -z "${VCS_REPOSITORIES}" ]; then
     done
 fi
 
-WP_PLUGINS=`get_config_value 'composer_install_plugins' ''
-echo 'install plugins ${WP_PLUGINS}'`
+WP_PLUGINS=`get_config_value 'composer_install_plugins' ''`
+echo 'install plugins ${WP_PLUGINS}'
 if [ ! -z "${WP_PLUGINS}" ]; then
    while IFS='' read -r -d '' key &&
         IFS='' read -r -d '' value; do
