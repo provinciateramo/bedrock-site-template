@@ -151,12 +151,20 @@ get_config_value 'wpconfig_constants' |
         IFS='' read -r -d '' value; do
       noroot wp config set "${key}" "${value}" --raw
   done
-  
+
+VCS_REPOSITORIES=`get_config_value 'composer_vcs_repositories' ''`
+if [ ! -z "${VCS_REPOSITORIES}" ]; then
+    for repo in ${VCS_REPOSITORIES//- /$'\n'}; do
+        noroot composer config repositories.vvv vcs ${plugin}
+    done
+fi
+
 WP_PLUGINS=`get_config_value 'install_plugins' ''`
 if [ ! -z "${WP_PLUGINS}" ]; then
-    for plugin in ${WP_PLUGINS//- /$'\n'}; do 
-        noroot wp plugin install "${plugin}" --activate
-    done
+   while IFS='' read -r -d '' key &&
+        IFS='' read -r -d '' value; do
+      noroot composer require ${key}:${value}
+  done
 fi
 
 echo "Site Template provisioner script completed"
