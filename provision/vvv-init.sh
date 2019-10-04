@@ -102,17 +102,19 @@ fi
 
 VCS_REPOSITORIES=`get_config_value 'composer_vcs_repositories' ''`
 if [ ! -z "${VCS_REPOSITORIES}" ]; then
-    echo 'Installazione repositoris'
+    echo 'Installazione repositories'
     for repo in ${VCS_REPOSITORIES//- /$'\n'}; do
        echo ${repo}   
        noroot composer config repositories.vvv vcs ${repo}
     done
 fi
 
-WP_PLUGINS=`get_config_value 'composer_install_plugins' ''`
+WP_PLUGINS=`get_config_value 'composer_install_plugins' ''
+echo 'install plugins ${WP_PLUGINS}'`
 if [ ! -z "${WP_PLUGINS}" ]; then
    while IFS='' read -r -d '' key &&
         IFS='' read -r -d '' value; do
+      echo 'Installing...${key}'
       noroot composer require ${key}:${value}
   done
 fi
