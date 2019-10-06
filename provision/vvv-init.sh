@@ -109,11 +109,13 @@ if [ ! -z "${VCS_REPOSITORIES}" ]; then
     done
 fi
 
-`get_config_value 'composer_install_plugins'` |
-  while IFS='' read -r -d '' key &&
-        IFS='' read -r -d '' value; do
-      echo 'Installing...${key}'
-      noroot composer require ${key}:${value}
-  done
+COMPOSER_PLUGINS=`get_config_value 'composer_install_plugins' ''`
+if [ ! -z "${COMPOSER_PLUGINS}" ]; then
+    echo 'Installazione plugins'
+    for cp in ${COMPOSER_PLUGINS//- /$'\n'}; do
+       echo ${cp}   
+       noroot composer require  ${cp}
+    done
+fi
 
 echo "Site Template provisioner script completed"
