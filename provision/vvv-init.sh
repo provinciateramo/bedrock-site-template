@@ -99,13 +99,14 @@ else
     sed -i "s#{{TLS_KEY}}##" "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf"
 fi
 
-
+COUNTER = 1
 VCS_REPOSITORIES=`get_config_value 'composer_vcs_repositories' ''`
 if [ ! -z "${VCS_REPOSITORIES}" ]; then
     echo 'Installazione repositories'
     for repo in ${VCS_REPOSITORIES//- /$'\n'}; do
-       echo ${repo}   
-       noroot composer config repositories.vvv vcs ${repo}
+       echo ${repo} - ${COUNTER}   
+       noroot composer config repositories.${COUNTER} vcs ${repo}
+       COUNTER=$[$COUNTER +1]
     done
 fi
 
