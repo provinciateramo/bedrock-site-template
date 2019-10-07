@@ -99,20 +99,14 @@ else
     sed -i "s#{{TLS_KEY}}##" "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf"
 fi
 
-get_config_value 'wpconfig_constants' |
-  while IFS='' read -r -d '' key &&
-        IFS='' read -r -d '' value; do
-      noroot wp config set "${key}" "${value}" --raw
-  done
-  
-COUNTER = 1
+(( COUNTER = 1 ))
 VCS_REPOSITORIES=`get_config_value 'composer_vcs_repositories' ''`
 if [ ! -z "${VCS_REPOSITORIES}" ]; then
     echo 'Installazione repositories'
     for repo in ${VCS_REPOSITORIES//- /$'\n'}; do
        echo ${repo} - ${COUNTER}   
-       noroot composer config repositories.${COUNTER} vcs ${repo}
-       COUNTER=$[$COUNTER +1]
+       noroot composer config repositories.$COUNTER vcs ${repo}
+       (( COUNTER++ ))
     done
 fi
 
@@ -124,5 +118,12 @@ if [ ! -z "${COMPOSER_PLUGINS}" ]; then
        noroot composer require  ${cp}
     done
 fi
+
+get_config_value 'wpconfig_constants' |
+  while IFS='' read -r -d '' key &&
+        IFS='' read -r -d '' value; do
+      noroot wp config set "${key}" "${value}" --raw
+  done
+  
 
 echo "Site Template provisioner script completed"
