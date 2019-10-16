@@ -110,6 +110,12 @@ if [ ! -z "${VCS_REPOSITORIES}" ]; then
     done
 fi
 
+get_config_value 'wpconfig_constants' |
+  while IFS='' read -r -d '' key &&
+        IFS='' read -r -d '' value; do
+      noroot wp config set "${key}" "${value}" --raw
+  done
+  
 COMPOSER_PLUGINS=`get_config_value 'composer_install_plugins' ''`
 if [ ! -z "${COMPOSER_PLUGINS}" ]; then
     echo 'Installazione plugins'
@@ -119,11 +125,11 @@ if [ ! -z "${COMPOSER_PLUGINS}" ]; then
     done
 fi
 
-get_config_value 'wpconfig_constants' |
-  while IFS='' read -r -d '' key &&
-        IFS='' read -r -d '' value; do
-      noroot wp config set "${key}" "${value}" --raw
-  done
-  
+WP_PLUGINS=`get_config_value 'install_plugins' ''`
+if [ ! -z "${WP_PLUGINS}" ]; then
+    for plugin in ${WP_PLUGINS//- /$'\n'}; do 
+        noroot wp plugin install "${plugin}" --activate
+    done
+fi
 
 echo "Site Template provisioner script completed"
